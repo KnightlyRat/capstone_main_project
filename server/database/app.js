@@ -58,7 +58,34 @@ app.get('/fetchReviews/dealer/:id', async (req, res) => {
 
 // Express route to fetch all dealerships
 app.get('/fetchDealers', async (req, res) => {
-//Write your code here
+    app.get('/fetchDealers', async (req, res) => {
+        try {
+            const dealers = await Dealer.find(); // Assuming 'Dealer' is your Mongoose model
+            res.status(200).json(dealers);
+        } catch (error) {
+            res.status(500).json({ error: 'An error occurred while fetching dealers' });
+        }
+    }); app.get('/fetchDealers/:state', async (req, res) => {
+        const state = req.params.state;
+        try {
+            const dealers = await Dealer.find({ state: state });
+            res.status(200).json(dealers);
+        } catch (error) {
+            res.status(500).json({ error: 'An error occurred while fetching dealers by state' });
+        }
+    });app.get('/fetchDealer/:id', async (req, res) => {
+        const id = req.params.id;
+        try {
+            const dealer = await Dealer.findById(id);
+            if (dealer) {
+                res.status(200).json(dealer);
+            } else {
+                res.status(404).json({ error: 'Dealer not found' });
+            }
+        } catch (error) {
+            res.status(500).json({ error: 'An error occurred while fetching the dealer' });
+        }
+    });
 });
 
 // Express route to fetch Dealers by a particular state
